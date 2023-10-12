@@ -1,0 +1,91 @@
+TASK 1: LIVE LANGUAGE TRANSLATION
+Intern ID- CC66711
+Designation- Web Development Intern
+Batch- October 2023
+==========================================================================================================
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Live Language Translation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        #content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Live Language Translation</h1>
+    <div id="content">
+        <div>
+            <label for="sourceLanguage">Select Source Language:</label>
+            <select id="sourceLanguage">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <!-- Add more language options here -->
+            </select>
+        </div>
+        <div>
+            <label for="targetLanguage">Select Target Language:</label>
+            <select id="targetLanguage">
+                <option value="en">English</option>
+                <option value="es">Spanish</option>
+                <!-- Add more language options here -->
+            </select>
+        </div>
+        <div>
+            <textarea id="sourceText" rows="5" placeholder="Enter text to translate"></textarea>
+        </div>
+        <div>
+            <button id="translateButton">Translate</button>
+        </div>
+        <div>
+            <h2>Translated Text:</h2>
+            <p id="translatedText"></p>
+        </div>
+    </div>
+
+    <script>
+        // Replace with your own Google Translate API key
+        const apiKey = 'YOUR_GOOGLE_TRANSLATE_API_KEY';
+
+        // Event listener for the Translate button
+        document.getElementById('translateButton').addEventListener('click', translateText);
+
+        function translateText() {
+            const sourceLanguage = document.getElementById('sourceLanguage').value;
+            const targetLanguage = document.getElementById('targetLanguage').value;
+            const sourceText = document.getElementById('sourceText').value;
+            const translatedText = document.getElementById('translatedText');
+
+            const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+            const data = {
+                q: sourceText,
+                source: sourceLanguage,
+                target: targetLanguage,
+            };
+
+            fetch(url, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(result => {
+                translatedText.textContent = result.data.translations[0].translatedText;
+            })
+            .catch(error => {
+                console.error('Translation error:', error);
+                translatedText.textContent = 'Translation error';
+            });
+        }
+    </script>
+</body>
+</html>
